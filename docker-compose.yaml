@@ -1,0 +1,27 @@
+services:
+
+  shin-database:
+    image: mongo:latest
+    restart: always
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: shin-dev
+      MONGO_INITDB_ROOT_PASSWORD: shin-dev
+    volumes:
+      - shin-data:/data/db
+
+  shin-db-admin-panel:
+    image: mongo-express:latest
+    restart: always
+    depends_on:
+      - shin-database
+    ports:
+      - 30000:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: shin-dev
+      ME_CONFIG_MONGODB_ADMINPASSWORD: shin-dev
+      ME_CONFIG_MONGODB_URL: mongodb://shin-dev:shin-dev@shin-database:27017/
+
+volumes:
+  shin-data:
